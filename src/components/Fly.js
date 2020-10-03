@@ -51,17 +51,18 @@ function Fly() {
     <Canvas
       pixelRatio={Math.min(2, isMobile ? window.devicePixelRatio : 1)}
       camera={{ fov: 100, position: [0, 0, 30] }}
+
       onMouseMove={onMouseMove}
       onMouseUp={() => set(false)}
       onMouseDown={() => set(true)}
       onCreated={({ gl }) => {
         gl.setClearColor(new THREE.Color('#020207'))
       }}>
-      <fog attach="fog" args={['white', 50, 190]} />
+      {/*<fog attach="fog" args={['white', 50, 190]} />*/}
       <pointLight distance={100} intensity={4} color="white" />
       <Number mouse={mouse} hover={hover} />
-      <Particles count={isMobile ? 5000 : 10000} mouse={mouse} />
-      <Effects down={down} />
+      {/*<Particles count={isMobile ? 5000 : 10000} mouse={mouse} />*/}
+      {/*<Effects down={down} />*/}
     </Canvas>
   )
 }

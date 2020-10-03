@@ -1,8 +1,8 @@
-import React, {useRef, useState} from "react";
+import React, {useRef, useState, Suspense} from "react";
 //R3F
 import {Canvas, useFrame} from "react-three-fiber";
 // Deai - R3F
-import {softShadows, MeshWobbleMaterial, Text, OrbitControls, Billboard, Html} from "drei";
+import {softShadows, MeshWobbleMaterial, Text, OrbitControls, Billboard, Html, useGLTFLoader} from "drei";
 // Styles
 import "../App.scss";
 // React Spring
@@ -12,6 +12,11 @@ import { Flex, Box } from 'react-three-flex'
 //Components
 import Fly from "./Fly";
 import Swarm from "./Swarm";
+// npx @react-three/gltfjsx public/scene.gltf src/components/Amazon.js
+// Models
+import Model from './Model'
+import Amazon from './Amazon'
+
 
 import {
   BrowserRouter as Router,
@@ -94,45 +99,52 @@ const Start = () => {
         {/* A light to help illumnate the spinning boxes */}
         <pointLight position={[-10, 0, -20]} intensity={0.5}/>
         <pointLight position={[0, -10, 0]} intensity={1.5}/>
-        <group>
-          {/* This mesh is the plane (The floor) */}
-          <mesh
-            rotation={[-Math.PI / 2, 0, 0]}
-            position={[0, -3, 0]}
-            receiveShadow>
-            <planeBufferGeometry attach='geometry' args={[100, 100]}/>
-            <shadowMaterial attach='material' opacity={0.3}/>
-          </mesh>
-          <Text
-            color="pink" // default
-            anchorX="center" // default
-            anchorY="middle" // default
-            position={[0, 4, -3]}
-            fontSize={2}
-          >
-            hello world!
-          </Text>
-          <SpinningMesh
-            position={[0, 1, 0]}
-            color='lightblue'
-            args={[.75, .75, .75]}
-            speed={2}
-          />
-          <Billboard position={[1.5, 2, 0]} args={[2.5, 2]}>
-            <Text
-              position={[0, 0, .5]}
-              color="red" // default
-              anchorX="center" // default
-              anchorY="middle" // default
-              fontSize={.2}
-            >
-              hello world!
-            </Text>
-          </Billboard>
-          <SpinningMesh position={[-2, 1, -5]} color='pink' speed={6} args={[.5, .5, .5]}/>
-          <SpinningMesh position={[5, 1, -2]} color='green' speed={6} args={[1, 1, 1]}/>
-          <Textsphere time={500}  args={[1,30, 30]} position={[-2, 0, 0]} />
-        </group>
+        {/*<group>*/}
+        {/*  /!* This mesh is the plane (The floor) *!/*/}
+        {/*  <mesh*/}
+        {/*    rotation={[-Math.PI / 2, 0, 0]}*/}
+        {/*    position={[0, -3, 0]}*/}
+        {/*    receiveShadow>*/}
+        {/*    <planeBufferGeometry attach='geometry' args={[100, 100]}/>*/}
+        {/*    <shadowMaterial attach='material' opacity={0.3}/>*/}
+        {/*  </mesh>*/}
+        {/*  <Text*/}
+        {/*    color="pink" // default*/}
+        {/*    anchorX="center" // default*/}
+        {/*    anchorY="middle" // default*/}
+        {/*    position={[0, 4, -3]}*/}
+        {/*    fontSize={2}*/}
+        {/*  >*/}
+        {/*    hello world!*/}
+        {/*  </Text>*/}
+        {/*  <SpinningMesh*/}
+        {/*    position={[0, 1, 0]}*/}
+        {/*    color='lightblue'*/}
+        {/*    args={[.75, .75, .75]}*/}
+        {/*    speed={2}*/}
+        {/*  />*/}
+        {/*  <Billboard position={[1.5, 2, 0]} args={[2.5, 2]}>*/}
+        {/*    <Text*/}
+        {/*      position={[0, 0, .5]}*/}
+        {/*      color="red" // default*/}
+        {/*      anchorX="center" // default*/}
+        {/*      anchorY="middle" // default*/}
+        {/*      fontSize={.2}*/}
+        {/*    >*/}
+        {/*      hello world!*/}
+        {/*    </Text>*/}
+        {/*  </Billboard>*/}
+        {/*  <SpinningMesh position={[-2, 1, -5]} color='pink' speed={6} args={[.5, .5, .5]}/>*/}
+        {/*  <SpinningMesh position={[5, 1, -2]} color='green' speed={6} args={[1, 1, 1]}/>*/}
+        {/*  <Textsphere time={500}  args={[1,30, 30]} position={[-2, 0, 0]} />*/}
+        {/*</group>*/}
+
+        <Suspense
+          fallback={
+            null
+          }>
+          <Amazon />
+        </Suspense>
         <OrbitControls/>
       </Canvas>
     </>
