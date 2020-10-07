@@ -12,10 +12,10 @@ import { Flex, Box } from 'react-three-flex'
 //Components
 import Fly from "./Fly";
 import Swarm from "./Swarm";
-// npx @react-three/gltfjsx public/scene.gltf src/components/Amazon.js
+// npx @react-three/gltfjsx public/eye.gltf src/components/Eye.js
 // Models
-import Model from './Model'
 import Amazon from './Amazon'
+import EyeBlue from './EyeBlue'
 
 
 import {
@@ -143,7 +143,7 @@ const Start = () => {
           fallback={
             null
           }>
-          <Amazon />
+          <Amazon/>
         </Suspense>
         <OrbitControls/>
       </Canvas>

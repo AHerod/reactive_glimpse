@@ -7,9 +7,8 @@ import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass'
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass'
 import { FilmPass } from 'three/examples/jsm/postprocessing/FilmPass'
 import { GlitchPass } from './post/Glitchpass'
-import { WaterPass } from './post/Waterpass'
 
-extend({ EffectComposer, ShaderPass, RenderPass, WaterPass, UnrealBloomPass, FilmPass, GlitchPass })
+extend({ EffectComposer, ShaderPass, RenderPass, UnrealBloomPass, FilmPass, GlitchPass })
 
 export default function Effects({ down }) {
   const composer = useRef()
@@ -20,7 +19,6 @@ export default function Effects({ down }) {
   return (
     <effectComposer ref={composer} args={[gl]}>
       <renderPass attachArray="passes" scene={scene} camera={camera} />
-      {/*<waterPass attachArray="passes" factor={1.5} />*/}
       <unrealBloomPass attachArray="passes" args={[aspect, 1, 1, 0]} />
       <glitchPass attachArray="passes" factor={down ? 1 : 0} />
     </effectComposer>
