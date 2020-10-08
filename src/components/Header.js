@@ -35,9 +35,6 @@ const Header = () => {
                 <Link to="/start">Start</Link>
               </li>
               <li>
-                <Link to="/fly">Fly</Link>
-              </li>
-              <li>
                 <Link to="/swarm">Swarm</Link>
               </li>
             </ul>
@@ -50,9 +47,6 @@ const Header = () => {
         <Switch>
           <Route path="/swarm">
             <Swarm/>
-          </Route>
-          <Route path="/fly">
-            <Fly/>
           </Route>
           <Route path="/start">
             <Start/>
