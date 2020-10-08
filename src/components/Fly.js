@@ -4,12 +4,11 @@ import ReactDOM from 'react-dom'
 import React, { Suspense, useState, useCallback, useEffect, useRef } from 'react'
 import { Canvas, useFrame, useThree } from 'react-three-fiber'
 import lerp from 'lerp'
-import Text from './Text'
 import Effects from './Effects'
 import Particles from './Particles'
 import EyeBlue from "./EyeBlue";
 import Amazon from "./Amazon";
-import {OrbitControls} from "drei";
+import {Billboard, Text, OrbitControls} from "drei";
 import EyeModel from "./EyeModel";
 
 function Fly() {
@@ -48,6 +47,17 @@ function Fly() {
       {/* Our main source of light, also casting our shadow */}
       <pointLight position={[-10, 0, -20]} intensity={.1}/>
       <pointLight position={[-20, -10, -40]} intensity={.1}/>
+      <group>
+        <Text
+          color="pink" // default
+          anchorX="center" // default
+          anchorY="middle" // default
+          position={[0, 10, -3]}
+          fontSize={2}
+        >
+          hello world!
+        </Text>
+      </group>
       <Suspense
         fallback={
           null
