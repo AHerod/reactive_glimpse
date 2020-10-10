@@ -8,7 +8,7 @@ import Effects from './Effects'
 import Particles from './Particles'
 import Quote from "./Quote";
 import EyeModel from "./EyeModel";
-import {Text, OrbitControls} from "drei";
+import {Text, Stars, OrbitControls, Html} from "drei";
 import "../App.scss";
 
 function Bubble({ count, mouse }) {
@@ -64,6 +64,7 @@ function Fly() {
   const [hiddenCubes, setHiddenCubes] = useState(true);
   const [hovered] = useState(false)
   const [glitch, setGlitch] = useState(false)
+  const [hoverColor, setHoverColor] = useState(true);
   const mouse = useRef([0, 0])
   const onMouseMove = useCallback(({ clientX: x, clientY: y }) => (mouse.current = [x - window.innerWidth / 2, y - window.innerHeight / 2]), [])
   const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
@@ -89,18 +90,20 @@ function Fly() {
       <pointLight position={[-20, -10, -40]} intensity={.1}/>
       <group>
         <Text
-          color="pink"
+          color={ hiddenQuote ? 'pink' : '#33FFBD'}
           position={[0, 10, -3]}
           fontSize={2}
           onClick={() => setHiddenQuote(!hiddenQuote)}
+          depthOffset={10}
         >
           Quote
         </Text>
         <Text
-          color="pink"
+          color={ hiddenCubes ? 'pink' : '#33FFBD'}
           position={[10, 5, -1]}
           fontSize={3}
           onClick={() => setHiddenCubes(!hiddenCubes)}
+
         >
           Cubes
         </Text>

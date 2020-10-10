@@ -78,7 +78,7 @@ nav {
     a {
       text-decoration: none;
       text-transform: uppercase;
-      color: #fff;
+      color: #00d0b2;
       font-weight: bold;
       margin-right: 20px;
     }
@@ -155,7 +155,7 @@ canvas {
     right: 20px;
     z-index: 999999;
     background: none;
-    border: 2px solid #2c5364;
+    border: 2px solid #33FFBD;
     padding: 5px;
     cursor: pointer;
     pointer-events: all;
@@ -206,3 +206,10 @@ canvas {
   }
 }
 
+h1 {
+  color: pink;
+
+  &:hover {
+    color: green;
+  }
+}
