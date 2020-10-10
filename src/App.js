@@ -1,4 +1,4 @@
-import React, {useRef, useState} from "react";
+import React, {useRef, useState, useEffect} from "react";
 
 //Components
 import Header from "./components/Header";
@@ -8,12 +8,12 @@ import "./App.scss";
 // React Spring
 
 
-const App = () => {
+const App = ({ hideLoader }) => {
+  useEffect(hideLoader, []);
 
   return (
     <>
-        <Fly/>
-        {/*<Header/>*/}
+      <Header/>
     </>
   );
 };

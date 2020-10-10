@@ -4,8 +4,7 @@ import React from "react";
 //Components
 import Start from "./Start";
 import Fly from "./Fly";
-import Swarm from "./Swarm";
-import Quote from "./Quote";
+
 
 // FS
 import {FullScreen, useFullScreenHandle} from "react-full-screen";
@@ -37,6 +36,9 @@ const Header = () => {
               <li>
                 <Link to="/swarm">Swarm</Link>
               </li>
+              <li>
+                <Link to="/fly">Fly</Link>
+              </li>
             </ul>
             <button onClick={handle.active ? handle.exit : handle.enter} className={'fullscreen__btn'}>
               <svg className={'fullscreen__btn--enter'} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 451.111 451.111"><defs/><path fill="#A51243" d="M290 0l56.389 56.389L257.778 145l48.333 48.333 88.611-88.611 56.389 56.389V0zM145 257.778l-88.611 88.611L0 290v161.111h161.111l-56.389-56.389 88.611-88.611zM306.111 257.778l-48.333 48.333 88.611 88.611L290 451.111h161.111V290l-56.389 56.389zM161.111 0H0v161.111l56.389-56.389L145 193.333 193.333 145l-88.611-88.611z"/></svg>
@@ -46,30 +48,18 @@ const Header = () => {
         </header>
         <Switch>
           <Route path="/swarm">
-            <Swarm/>
+            <h1>dadad</h1>
           </Route>
           <Route path="/start">
             <Start/>
           </Route>
-          <Route path="/">
-            <Quote/>
+          <Route path="/Fly">
+            <Fly/>
           </Route>
         </Switch>
       </FullScreen>
-
     </Router>
   );
 };
 
 export default Header;
-const Home = () => {
-  return <h2>Home</h2>;
-}
-
-const About = () => {
-  return <h2>About</h2>;
-}
-
-const Users = () => {
-  return <h2>Users</h2>;
-}
