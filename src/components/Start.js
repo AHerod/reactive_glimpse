@@ -1,9 +1,8 @@
-import React, {useRef, useState, Suspense} from "react";
+import React, {useRef, useState, Suspense, useMemo, useEffect, useCallback} from "react";
 
 //R3F
-import {Canvas, useFrame} from "react-three-fiber";
 // Deai - R3F
-import {softShadows, MeshWobbleMaterial, Text, OrbitControls, Billboard, Html, useGLTFLoader} from "drei";
+import {softShadows, MeshWobbleMaterial, Text, OrbitControls, Billboard, Html, RoundedBox,Tube} from "drei";
 // Styles
 import "../App.scss";
 // React Spring
@@ -17,16 +16,111 @@ import Swarm from "./Swarm";
 // Models
 import Amazon from './Amazon'
 import EyeBlue from './EyeBlue'
+// from:
+import * as THREE from 'three'
+import ReactDOM from 'react-dom'
+import { Canvas, extend, useFrame, useThree } from 'react-three-fiber'
+import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer'
+import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass'
+import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass'
+import { AfterimagePass } from 'three/examples/jsm/postprocessing/AfterimagePass'
+import { FXAAShader } from 'three/examples/jsm/shaders/FXAAShader'
+import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass'
 
+// Makes these prototypes available as "native" jsx-string elements
+extend({ EffectComposer, ShaderPass, RenderPass, AfterimagePass, UnrealBloomPass })
 
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link
-} from "react-router-dom";
-// soft Shadows
-softShadows();
+function Cells({ count, mouse }) {
+  const mesh = useRef()
+  const light = useRef()
+  const { size, viewport } = useThree()
+  const aspect = size.width / viewport.width
+
+  const dummy = useMemo(() => new THREE.Object3D(), [])
+  // Generate some random positions, speed factors and timings
+  const particles = useMemo(() => {
+    const temp = []
+    for (let i = 0; i < count; i++) {
+      const t = Math.random() * 100
+      const factor = 20 + Math.random() * 100
+      const speed = 0.005 + Math.random() / 200
+      const xFactor = -50 + Math.random() * 100
+      const yFactor = -50 + Math.random() * 100
+      const zFactor = -50 + Math.random() * 100
+      temp.push({ t, factor, speed, xFactor, yFactor, zFactor, mx: 0, my: 0 })
+    }
+    return temp
+  }, [count])
+  // The innards of this hook will run every frame
+  useFrame(state => {
+    // Makes the light follow the mouse
+    light.current.position.set(mouse.current[0] / aspect, -mouse.current[1] / aspect, 0)
+    // Run through the randomized data to calculate some movement
+    particles.map((particle, i) => {
+      let { t, factor, speed, xFactor, yFactor, zFactor } = particle
+      // There is no sense or reason to any of this, just messing around with trigonometric functions
+      t = particle.t += speed / 2
+      const a = Math.cos(t) + Math.sin(t * 1) / 10
+      const b = Math.sin(t) + Math.cos(t * 2) / 10
+      const s = Math.cos(t)
+      particle.mx += (mouse.current[0] - particle.mx) * 0.01
+      particle.my += (mouse.current[1] * -1 - particle.my) * 0.01
+      // Update the dummy object
+      dummy.position.set(
+        (particle.mx / 10) * a + xFactor + Math.cos((t / 10) * factor) + (Math.sin(t * 1) * factor) / 10,
+        (particle.my / 10) * b + yFactor + Math.sin((t / 10) * factor) + (Math.cos(t * 2) * factor) / 10,
+        (particle.my / 10) * b + zFactor + Math.cos((t / 10) * factor) + (Math.sin(t * 3) * factor) / 10
+      )
+      dummy.scale.set(s, s, s)
+      dummy.rotation.set(s * 5, s * 5, s * 5)
+      dummy.updateMatrix()
+      // And apply the matrix to the instanced item
+      mesh.current.setMatrixAt(i, dummy.matrix)
+    })
+    mesh.current.instanceMatrix.needsUpdate = true
+  })
+  return (
+    <>
+      <pointLight ref={light} distance={40} intensity={8} color="lightblue">
+        <mesh>
+          <sphereBufferGeometry attach="geometry" args={[3.5, 32, 32]} />
+          <meshBasicMaterial attach="material" color="lightblue" />
+        </mesh>
+      </pointLight>
+      <instancedMesh ref={mesh} args={[null, null, count]}>
+        <dodecahedronBufferGeometry attach="geometry" args={[0.5, 0]} />
+        <meshStandardMaterial attach="material" color="#700020" />
+      </instancedMesh>
+    </>
+  )
+}
+
+function Effect() {
+  const composer = useRef()
+  const { scene, gl, size, camera } = useThree()
+  const aspect = useMemo(() => new THREE.Vector2(size.width, size.height), [size])
+  useEffect(() => void composer.current.setSize(size.width, size.height), [size])
+  useFrame(() => composer.current.render(), 1)
+  return (
+    <effectComposer ref={composer} args={[gl]}>
+      <renderPass attachArray="passes" scene={scene} camera={camera} />
+Z      <afterimagePass attachArray="passes" uniforms-damp-value={0.3} />
+      <unrealBloomPass attachArray="passes" args={[aspect, 1.5, 1, 0]} />
+      <shaderPass attachArray="passes" args={[FXAAShader]} uniforms-resolution-value={[1 / size.width, 1 / size.height]} renderToScreen />
+    </effectComposer>
+  )
+}
+
+function Dolly() {
+  const { camera } = useThree()
+  // This one makes the camera move in and out
+  useFrame(({ clock }) => {
+    camera.position.z = 50 + Math.sin(clock.getElapsedTime() * 0.5) * 10
+    camera.updateProjectionMatrix()
+  })
+  return null
+}
+
 
 const SpinningMesh = ({position, color, speed, args}) => {
   //ref to target the mesh
@@ -75,81 +169,23 @@ const Textsphere = ({ time, args, ...props }) => {
 }
 
 const Start = () => {
-  return (
-    <>
-      {/* Our Scene & Camera is already built into our canvas */}
-      <Canvas
-        colorManagement
-        shadowMap
-        camera={{position: [-5, 2, 10], fov: 60}}>
-        {/* This light makes things look pretty */}
-        <ambientLight intensity={0.3}/>
-        {/* Our main source of light, also casting our shadow */}
-        <directionalLight
-          castShadow
-          position={[0, 10, 0]}
-          intensity={1.5}
-          shadow-mapSize-width={1024}
-          shadow-mapSize-height={1024}
-          shadow-camera-far={50}
-          shadow-camera-left={-10}
-          shadow-camera-right={10}
-          shadow-camera-top={10}
-          shadow-camera-bottom={-10}
-        />
-        {/* A light to help illumnate the spinning boxes */}
-        <pointLight position={[-10, 0, -20]} intensity={0.5}/>
-        <pointLight position={[0, -10, 0]} intensity={1.5}/>
-        <group>
-          {/* This mesh is the plane (The floor) */}
-          <mesh
-            rotation={[-Math.PI / 2, 0, 0]}
-            position={[0, -3, 0]}
-            receiveShadow>
-            <planeBufferGeometry attach='geometry' args={[100, 100]}/>
-            <shadowMaterial attach='material' opacity={0.3}/>
+      const mouse = useRef([0, 0])
+      const onMouseMove = useCallback(({ clientX: x, clientY: y }) => (mouse.current = [x - window.innerWidth / 2, y - window.innerHeight / 2]), [])
+      return (
+      <div style={{ width: '100%', height: '100%' }} onMouseMove={onMouseMove}>
+        <Canvas camera={{ fov: 75, position: [0, 0, 70] }}>
+          <pointLight distance={60} intensity={2} color="white" />
+          <spotLight intensity={0.5} position={[0, 0, 70]} penumbra={1} color="lightblue" />
+          <mesh>
+            <planeBufferGeometry attach="geometry" args={[100, 100]} />
+            <meshPhongMaterial attach="material" color="#272727" depthTest={false} />
           </mesh>
-          <Text
-            color="pink" // default
-            anchorX="center" // default
-            anchorY="middle" // default
-            position={[0, 4, -3]}
-            fontSize={2}
-          >
-            hello world!
-          </Text>
-          <SpinningMesh
-            position={[0, 1, 0]}
-            color='lightblue'
-            args={[.75, .75, .75]}
-            speed={2}
-          />
-          <Billboard position={[1.5, 2, 0]} args={[2.5, 2]}>
-            <Text
-              position={[0, 0, .5]}
-              color="red" // default
-              anchorX="center" // default
-              anchorY="middle" // default
-              fontSize={.2}
-            >
-              hello world!
-            </Text>
-          </Billboard>
-          <SpinningMesh position={[-2, 1, -5]} color='pink' speed={6} args={[.5, .5, .5]}/>
-          <SpinningMesh position={[5, 1, -2]} color='green' speed={6} args={[1, 1, 1]}/>
-          <Textsphere time={500}  args={[1,30, 30]} position={[-2, 0, 0]} />
-        </group>
-
-        <Suspense
-          fallback={
-            null
-          }>
-          <Amazon/>
-        </Suspense>
-        <OrbitControls/>
-      </Canvas>
-    </>
-  );
+          <Cells mouse={mouse} count={10000} />
+          <Effect />
+          <Dolly />
+        </Canvas>
+      </div>
+      )
 };
 
 export default Start;
