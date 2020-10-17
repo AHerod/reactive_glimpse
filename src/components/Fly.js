@@ -70,7 +70,7 @@ function Cells({ count, mouse }) {
         </mesh>
       </pointLight>
       <instancedMesh ref={mesh} args={[null, null, count]}>
-        <dodecahedronBufferGeometry attach="geometry" args={[0.5, 0]} />
+        <dodecahedronBufferGeometry attach="geometry" args={[.7, 0]} />
         <meshStandardMaterial attach="material" color="#33FFBD" />
       </instancedMesh>
     </>
@@ -157,6 +157,7 @@ function Fly() {
   const [hiddenQuote, setHiddenQuote] = useState(true);
   const [hiddenCubes, setHiddenCubes] = useState(true);
   const [hiddenRedEye, setHiddenRedEye] = useState(true);
+  const [hiddenShapes, setHiddenShapes] = useState(true);
   const [hovered] = useState(false)
   const [glitch, setGlitch] = useState(false)
   const [hoverColor, setHoverColor] = useState(true);
@@ -210,6 +211,14 @@ function Fly() {
         >
           Cubes
         </Text>
+        <Text
+          color={hiddenCubes ? 'pink' : '#33FFBD'}
+          position={[11, -2, 2]}
+          fontSize={2}
+          onClick={() => setHiddenShapes(!hiddenShapes)}
+        >
+          Shapes
+        </Text>
       </group>
       {
         !hiddenQuote &&
@@ -221,8 +230,10 @@ function Fly() {
           <Bubble mouse={mouse} count={300} args={[.1, .1, .1]}/>
         </group>
       }
-
-      <Cells mouse={mouse} count={1000} />
+      {
+        !hiddenShapes &&
+        <Cells mouse={mouse} count={1000} />
+      }
       <Effect />
       <Suspense
         fallback={
