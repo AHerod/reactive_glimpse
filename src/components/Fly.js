@@ -196,6 +196,7 @@ function Fly() {
               onPointerOver={() => setHiddenRedEye(false)}
               onPointerOut={() => setHiddenRedEye(true)}
               depthOffset={10}
+              font = {'Nova Square'}
             >
               Heterochromia
             </Text>

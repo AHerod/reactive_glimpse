@@ -237,4 +237,15 @@ h1 {
   box-shadow: 1px 1px 11px 6px #33FFBD;
   border-radius: 10px;
   margin-bottom: 25px;
+  font-family: 'Nova Square', cursive;
+  background: rgba(0,0,0,.2);
+
+  @media screen and (max-width: 768px) {
+    width: 80vw;
+    font-size: 12px;
+  }
+}
+
+* {
+  font-family: 'Nova Square', cursive;
 }
