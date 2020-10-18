@@ -174,96 +174,102 @@ function Fly() {
 
 
   return (
-    <Canvas
-      pixelRatio={Math.min(2, isMobile ? window.devicePixelRatio : 1)}
-      camera={{position: [-3, 1, 12], fov: 80}}
-      onCreated={({gl}) => {
-        gl.setClearColor(new THREE.Color('#020207'))
-      }} onMouseMove={onMouseMove}>
+    <>
 
-      <fog attach="fog" args={['lightblue', 15, 150]}/>
-      <ambientLight intensity={0.3}/>
-      <pointLight position={[-10, 0, -20]} intensity={.1}/>
-      <pointLight position={[-20, -10, -40]} intensity={.1}/>
-      <group>
-        <Billboard>
-          <Text
-            color={hiddenRedEye ? 'pink' : '#33FFBD'}
-            position={[-10, 7, -5]}
-            fontSize={1}
-            onPointerOver={() => setHiddenRedEye(false)}
-            onPointerOut={() => setHiddenRedEye(true)}
-            depthOffset={10}
-          >
-            Heterochromia
-          </Text>
-        </Billboard>
+      <Canvas
+        pixelRatio={Math.min(2, isMobile ? window.devicePixelRatio : 1)}
+        camera={{position: [-3, 1, 12], fov: 80}}
+        onCreated={({gl}) => {
+          gl.setClearColor(new THREE.Color('#020207'))
+        }} onMouseMove={onMouseMove}>
 
-        <Billboard>
-          <Text
-            color={hiddenQuote ? 'pink' : '#33FFBD'}
-            position={[0, 10, -3]}
-            fontSize={2}
-            onPointerOver={() => setHiddenQuote(false)}
-            onPointerOut={() => setHiddenQuote(true)}
-            depthOffset={10}
-          >
-            Quote
-          </Text>
-        </Billboard>
+        <fog attach="fog" args={['lightblue', 15, 150]}/>
+        <ambientLight intensity={0.3}/>
+        <pointLight position={[-10, 0, -20]} intensity={.1}/>
+        <pointLight position={[-20, -10, -40]} intensity={.1}/>
+        <group>
+          <Billboard>
+            <Text
+              color={hiddenRedEye ? 'pink' : '#33FFBD'}
+              position={[-10, 7, -5]}
+              fontSize={1}
+              onPointerOver={() => setHiddenRedEye(false)}
+              onPointerOut={() => setHiddenRedEye(true)}
+              depthOffset={10}
+            >
+              Heterochromia
+            </Text>
+          </Billboard>
 
-        <Billboard>
-          <Text
-            color={hiddenCubes ? 'pink' : '#33FFBD'}
-            position={[10, 5, -1]}
-            fontSize={3}
-            onPointerOver={() => setHiddenCubes(false)}
-            onPointerOut={() => setHiddenCubes(true)}
-          >
-            Cubes
-          </Text>
-        </Billboard>
-        <Billboard>
-          <Text
-            color={hiddenShapes ? 'pink' : '#33FFBD'}
-            position={[11, -2, 2]}
-            fontSize={2}
-            onPointerOver={() => setHiddenShapes(false)}
-            onPointerOut={() => setHiddenShapes(true)}
-          >
-            Shapes
-          </Text>
-        </Billboard>
-      </group>
-      {
-        !hiddenQuote &&
-        <Quote/>
-      }
-      {
-        !hiddenCubes &&
-        <group className={'swarmScreen'} style={{width: '100%', height: '100%'}} onMouseMove={onMouseMove}>
-          <Bubble mouse={mouse} count={300} args={[.1, .1, .1]}/>
+          <Billboard>
+            <Text
+              color={hiddenQuote ? 'pink' : '#33FFBD'}
+              position={[0, 10, -3]}
+              fontSize={2}
+              onPointerOver={() => setHiddenQuote(false)}
+              onPointerOut={() => setHiddenQuote(true)}
+              depthOffset={10}
+            >
+              Quote
+            </Text>
+          </Billboard>
+
+          <Billboard>
+            <Text
+              color={hiddenCubes ? 'pink' : '#33FFBD'}
+              position={[10, 5, -1]}
+              fontSize={3}
+              onPointerOver={() => setHiddenCubes(false)}
+              onPointerOut={() => setHiddenCubes(true)}
+            >
+              Cubes
+            </Text>
+          </Billboard>
+          <Billboard>
+            <Text
+              color={hiddenShapes ? 'pink' : '#33FFBD'}
+              position={[11, -2, 2]}
+              fontSize={2}
+              onPointerOver={() => setHiddenShapes(false)}
+              onPointerOut={() => setHiddenShapes(true)}
+            >
+              Shapes
+            </Text>
+          </Billboard>
         </group>
-      }
-      {
-        !hiddenShapes &&
-        <Cells mouse={mouse} count={1000} />
-      }
-      <Effect />
-      <Suspense
-        fallback={
-          null
-        }>
         {
-          !hiddenRedEye &&
-          <RedEyeModel scale={[.2, .2, .2]} onClick={() => setGlitch(!glitch)} position={[-10, 0, 0]}/>
+          !hiddenQuote &&
+          <Quote/>
         }
-        <EyeModel scale={[.2, .2, .2]} onClick={() => setGlitch(!glitch)}/>
-      </Suspense>
-      <Particles count={isMobile ? 5000 : 10000} mouse={mouse}/>
-      <Effects down={glitch}/>
-      <OrbitControls/>
-    </Canvas>
+        {
+          !hiddenCubes &&
+          <group className={'swarmScreen'} style={{width: '100%', height: '100%'}} onMouseMove={onMouseMove}>
+            <Bubble mouse={mouse} count={300} args={[.1, .1, .1]}/>
+          </group>
+        }
+        {
+          !hiddenShapes &&
+          <Cells mouse={mouse} count={1000} />
+        }
+        <Effect />
+        <Suspense
+          fallback={
+            null
+          }>
+          {
+            !hiddenRedEye &&
+            <RedEyeModel scale={[.2, .2, .2]} onClick={() => setGlitch(!glitch)} position={[-10, 0, 0]}/>
+          }
+          <EyeModel scale={[.2, .2, .2]} onClick={() => setGlitch(!glitch)}/>
+        </Suspense>
+        <Particles count={isMobile ? 5000 : 10000} mouse={mouse}/>
+        <Effects down={glitch}/>
+        <OrbitControls/>
+      </Canvas>
+      <div className={'tooltip'}>
+        <p>Organic, mocha qui shop acerbic con panna strong variety. Cup aged viennese a dripper so strong.</p>
+      </div>
+    </>
   )
 }
 

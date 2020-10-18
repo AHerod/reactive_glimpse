@@ -224,3 +224,17 @@ h1 {
   opacity: 1;
   visibility: visible;
 }
+
+.tooltip {
+  position: fixed;
+  transform: translateX(-50%);
+  left: 50%;
+  bottom: 0;
+  padding: 20px;
+  font-size: 18px;
+  text-align: center;
+  color: #fff;
+  box-shadow: 1px 1px 11px 6px #33FFBD;
+  border-radius: 10px;
+  margin-bottom: 25px;
+}
