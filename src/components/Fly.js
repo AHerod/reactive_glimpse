@@ -8,10 +8,11 @@ import Effects from './Effects'
 import Particles from './Particles'
 import Quote from "./Quote";
 import EyeModel from "./EyeModel";
-import {Text, Stars, OrbitControls, Html} from "drei";
+import {Text, Stars, OrbitControls, Html, Billboard} from "drei";
 import "../App.scss";
 import RedEyeModel from "./RedEyeModel";
 import {FXAAShader} from "three/examples/jsm/shaders/FXAAShader";
+import {useSubdivision} from "@react-three/drei";
 
 function Cells({ count, mouse }) {
   const mesh = useRef()
@@ -185,40 +186,54 @@ function Fly() {
       <pointLight position={[-10, 0, -20]} intensity={.1}/>
       <pointLight position={[-20, -10, -40]} intensity={.1}/>
       <group>
-        <Text
-          color={hiddenRedEye ? 'pink' : '#33FFBD'}
-          position={[-10, 7, -5]}
-          fontSize={1}
-          onClick={() => setHiddenRedEye(!hiddenRedEye)}
-          depthOffset={10}
-        >
-          Heterochromia
-        </Text>
-        <Text
-          color={hiddenQuote ? 'pink' : '#33FFBD'}
-          position={[0, 10, -3]}
-          fontSize={2}
-          onClick={() => setHiddenQuote(!hiddenQuote)}
-          depthOffset={10}
-        >
-          Quote
-        </Text>
-        <Text
-          color={hiddenCubes ? 'pink' : '#33FFBD'}
-          position={[10, 5, -1]}
-          fontSize={3}
-          onClick={() => setHiddenCubes(!hiddenCubes)}
-        >
-          Cubes
-        </Text>
-        <Text
-          color={hiddenCubes ? 'pink' : '#33FFBD'}
-          position={[11, -2, 2]}
-          fontSize={2}
-          onClick={() => setHiddenShapes(!hiddenShapes)}
-        >
-          Shapes
-        </Text>
+        <Billboard>
+          <Text
+            color={hiddenRedEye ? 'pink' : '#33FFBD'}
+            position={[-10, 7, -5]}
+            fontSize={1}
+            onPointerOver={() => setHiddenRedEye(false)}
+            onPointerOut={() => setHiddenRedEye(true)}
+            depthOffset={10}
+          >
+            Heterochromia
+          </Text>
+        </Billboard>
+
+        <Billboard>
+          <Text
+            color={hiddenQuote ? 'pink' : '#33FFBD'}
+            position={[0, 10, -3]}
+            fontSize={2}
+            onPointerOver={() => setHiddenQuote(false)}
+            onPointerOut={() => setHiddenQuote(true)}
+            depthOffset={10}
+          >
+            Quote
+          </Text>
+        </Billboard>
+
+        <Billboard>
+          <Text
+            color={hiddenCubes ? 'pink' : '#33FFBD'}
+            position={[10, 5, -1]}
+            fontSize={3}
+            onPointerOver={() => setHiddenCubes(false)}
+            onPointerOut={() => setHiddenCubes(true)}
+          >
+            Cubes
+          </Text>
+        </Billboard>
+        <Billboard>
+          <Text
+            color={hiddenShapes ? 'pink' : '#33FFBD'}
+            position={[11, -2, 2]}
+            fontSize={2}
+            onPointerOver={() => setHiddenShapes(false)}
+            onPointerOut={() => setHiddenShapes(true)}
+          >
+            Shapes
+          </Text>
+        </Billboard>
       </group>
       {
         !hiddenQuote &&
