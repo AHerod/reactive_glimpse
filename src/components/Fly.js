@@ -94,18 +94,6 @@ function Effect() {
   )
 }
 
-function Dolly() {
-  const { camera } = useThree()
-  // This one makes the camera move in and out
-  useFrame(({ clock }) => {
-    camera.position.z = 50 + Math.sin(clock.getElapsedTime() * 0.5) * 10
-    camera.updateProjectionMatrix()
-  })
-  return null
-}
-
-
-
 function Bubble({count, mouse}) {
   const mesh = useRef()
   const dummy = useMemo(() => new THREE.Object3D(), [])
@@ -175,7 +163,6 @@ function Fly() {
 
   return (
     <>
-
       <Canvas
         pixelRatio={Math.min(2, isMobile ? window.devicePixelRatio : 1)}
         camera={{position: [-3, 1, 12], fov: 80}}
@@ -201,7 +188,6 @@ function Fly() {
               Heterochromia
             </Text>
           </Billboard>
-
           <Billboard>
             <Text
               color={hiddenQuote ? 'pink' : '#33FFBD'}
@@ -214,7 +200,6 @@ function Fly() {
               Quote
             </Text>
           </Billboard>
-
           <Billboard>
             <Text
               color={hiddenCubes ? 'pink' : '#33FFBD'}
@@ -254,9 +239,7 @@ function Fly() {
         }
         <Effect />
         <Suspense
-          fallback={
-            null
-          }>
+          fallback={null}>
           {
             !hiddenRedEye &&
             <RedEyeModel scale={[.2, .2, .2]} onClick={() => setGlitch(!glitch)} position={[-10, 0, 0]}/>
