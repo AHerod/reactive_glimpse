@@ -1,5 +1,12 @@
 import * as THREE from 'three'
 import ReactDOM from 'react-dom'
+import {
+  CubeTextureLoader,
+  CubeCamera,
+  WebGLCubeRenderTarget,
+  RGBFormat,
+  LinearMipmapLinearFilter
+} from "three";
 import React, {Suspense, useState, useCallback, useEffect, useRef, useMemo} from 'react'
 import {Canvas, useFrame, useThree} from 'react-three-fiber'
 
@@ -8,6 +15,7 @@ import Effects from './Effects'
 import Particles from './Particles'
 import Quote from "./Quote";
 import EyeModel from "./EyeModel";
+import SkyBox from "./SkyBox";
 import {Text, Stars, OrbitControls, Html, Billboard} from "drei";
 import "../App.scss";
 import RedEyeModel from "./RedEyeModel";
@@ -174,8 +182,9 @@ function Fly() {
         <ambientLight intensity={0.3}/>
         <pointLight position={[-10, 0, -20]} intensity={.1}/>
         <pointLight position={[-20, -10, -40]} intensity={.1}/>
+        <SkyBox></SkyBox>
         <group>
-          <Billboard>
+          <Billboard material-color="red">
             <Text
               color={hiddenRedEye ? 'pink' : '#33FFBD'}
               position={[-10, 7, -5]}
