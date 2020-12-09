@@ -45,10 +45,10 @@ const Header = () => {
           <Route path="/swarm">
             <h1>dadad</h1>
           </Route>
-          <Route path="/start">
+          <Route path="/">
             <Start/>
           </Route>
-          <Route path="/">
+          <Route path="fly">
             <Fly/>
           </Route>
         </Switch>

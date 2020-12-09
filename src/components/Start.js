@@ -26,6 +26,8 @@ import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass'
 import { AfterimagePass } from 'three/examples/jsm/postprocessing/AfterimagePass'
 import { FXAAShader } from 'three/examples/jsm/shaders/FXAAShader'
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass'
+// Font
+import JSONfont from "../assets/fonts/Roboto.json";
 
 // Makes these prototypes available as "native" jsx-string elements
 extend({ EffectComposer, ShaderPass, RenderPass, AfterimagePass, UnrealBloomPass })
@@ -121,6 +123,34 @@ function Dolly() {
   return null
 }
 
+function TextMesh(props) {
+  const [hovered, setHover] = useState(false);
+  const mesh = useRef();
+
+  useFrame(() => {
+    mesh.current.geometry.center();
+  });
+
+  const font = new THREE.FontLoader().parse(JSONfont);
+
+  const textOptions = {
+    font,
+    size: 8,
+    height: 2
+  };
+
+  return (
+    <mesh
+      {...props}
+      ref={mesh}
+      onPointerOver={(e) => setHover(true)}
+      onPointerOut={(e) => setHover(false)}
+    >
+      <textGeometry attach="geometry" args={["GLIMPSE", textOptions]} />
+      <meshStandardMaterial attach="material" color="#272727"  />
+    </mesh>
+  );
+}
 
 const SpinningMesh = ({position, color, speed, args}) => {
   //ref to target the mesh
@@ -177,10 +207,10 @@ const Start = () => {
           <pointLight distance={60} intensity={2} color="white" />
           <spotLight intensity={0.5} position={[0, 0, 70]} penumbra={1} color="lightblue" />
           <mesh>
-            <planeBufferGeometry attach="geometry" args={[100, 100]} />
             <meshPhongMaterial attach="material" color="#272727" depthTest={false} />
           </mesh>
-          <Cells mouse={mouse} count={10000} />
+            <TextMesh position={[0, 0, 0]}/>
+          <Cells mouse={mouse} count={5000} />
           <Effect />
           <Dolly />
         </Canvas>
