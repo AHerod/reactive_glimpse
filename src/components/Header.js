@@ -32,7 +32,7 @@ const Header = () => {
                 <Link to="/swarm">Swarm</Link>
               </li>
               <li>
-                <Link to="/">Fly</Link>
+                <Link to="/fly">Fly</Link>
               </li>
             </ul>
             <button onClick={handle.active ? handle.exit : handle.enter} className={'fullscreen__btn'}>
@@ -45,10 +45,10 @@ const Header = () => {
           <Route path="/swarm">
             <h1>dadad</h1>
           </Route>
-          <Route path="/">
+          <Route path="/start">
             <Start/>
           </Route>
-          <Route path="fly">
+          <Route path="/fly">
             <Fly/>
           </Route>
         </Switch>
